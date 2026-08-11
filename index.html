@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Join The Weekend Film School, Hyderabad</title>
+<meta name="description" content="One page, two ways in. Join the crew list if you make things, or the schedule if you come for Weekend Nights, Saturday filmmaking and Sunday workshops.">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Weekend Film School">
+<meta property="og:title" content="Join The Weekend Film School, Hyderabad">
+<meta property="og:description" content="One page, two ways in. Find the room that fits what you make, or the one that tells you what is on this weekend.">
+<meta property="og:image" content="assets/img/favicon-512.png">
+<meta name="twitter:card" content="summary">
+
+<link rel="icon" href="assets/img/favicon.ico" sizes="any">
+<link rel="icon" href="assets/img/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon-180.png">
+<meta name="theme-color" content="#EAE6DC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14161A" media="(prefers-color-scheme: dark)">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/css/gateway.css">
+</head>
+
+<body data-view="home">
+<a class="skip" href="#main">Skip to the choices</a>
+
+<!-- Paper grain. Fixed and non-interactive so it never repaints on scroll. -->
+<div class="grain" aria-hidden="true"></div>
+
+<div class="sheet">
+
+  <header class="mast">
+    <a class="mast__mark" href="#/" aria-label="The Weekend Film School, start again">
+      <!-- brand/logo/wfs-mark-mono-ink.svg, recoloured to currentColor so one
+           copy serves both the paper and the ink surface. Geometry untouched. -->
+      <svg viewBox="0 0 1000 1000" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="currentColor" stroke-width="52">
+          <path d="M 651.54 134.14 A 396 396 0 0 1 814.17 741.07"/>
+          <path d="M 741.07 814.17 A 396 396 0 0 1 448.31 892.61"/>
+          <path d="M 348.46 865.86 A 396 396 0 0 1 134.14 348.46"/>
+          <path d="M 185.83 258.93 A 396 396 0 0 1 551.69 107.39"/>
+        </g>
+        <g stroke="currentColor" stroke-width="20">
+          <line x1="191.69" y1="322" x2="108.56" y2="274"/>
+          <line x1="592.14" y1="156.13" x2="616.99" y2="63.40"/>
+          <line x1="751.73" y1="751.73" x2="819.61" y2="819.61"/>
+          <line x1="407.86" y1="843.87" x2="383.01" y2="936.60"/>
+        </g>
+        <rect x="334" y="640" width="332" height="18" fill="currentColor"/>
+        <text x="500" y="618" text-anchor="middle" fill="currentColor" font-family="Archivo"
+              font-weight="900" font-size="540" style="font-variation-settings:'wdth' 125">1</text>
+      </svg>
+      <span class="mast__name">The Weekend Film School</span>
+    </a>
+    <p class="mast__doc" id="doc-label">Joining sheet</p>
+    <p class="mast__serial" id="serial">WFS/COMMUNITY/JOIN</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+
+    <!-- ============================================================ FRONT -->
+    <section class="view view--front" id="view-home" aria-labelledby="front-h">
+      <div class="front__head stagger" style="--i:0">
+        <h1 class="front__q" id="front-h" tabindex="-1">What brings<br>you here?</h1>
+        <p class="front__sub">Two ways in. Pick the one that sounds like you.</p>
+      </div>
+
+      <nav class="doors" aria-label="Choose a side">
+        <a class="door door--green stagger" style="--i:1" href="#/creators">
+          <span class="door__doc">Crew list</span>
+          <span class="door__title">I make things</span>
+          <span class="door__blurb">Actors, directors, writers, editors, camera, sound, comedy, dance, crew.</span>
+          <span class="door__cue" aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="door door--blue stagger" style="--i:2" href="#/audience">
+          <span class="door__doc">Schedule</span>
+          <span class="door__title">I come for the experience</span>
+          <span class="door__blurb">Weekend Nights, Saturday filmmaking, Sunday workshops.</span>
+          <span class="door__cue" aria-hidden="true">&rarr;</span>
+        </a>
+      </nav>
+    </section>
+
+    <!-- ======================================================== CREW LIST -->
+    <section class="view view--side" id="view-creators" aria-labelledby="creators-h" hidden>
+      <a class="back stagger" style="--i:0" href="#/"><span aria-hidden="true">&larr;</span> Both ways in</a>
+      <div class="side__head stagger" style="--i:1">
+        <h1 class="side__h" id="creators-h" tabindex="-1">Find your people.</h1>
+        <p class="side__intro">Join the part of the community that fits what you make. You can be in more than one.</p>
+      </div>
+      <div id="creators-body"></div>
+    </section>
+
+    <!-- ========================================================= SCHEDULE -->
+    <section class="view view--side" id="view-audience" aria-labelledby="audience-h" hidden>
+      <a class="back stagger" style="--i:0" href="#/"><span aria-hidden="true">&larr;</span> Both ways in</a>
+      <div class="side__head stagger" style="--i:1">
+        <h1 class="side__h" id="audience-h" tabindex="-1">Where do you want to be?</h1>
+        <p class="side__intro">Tickets and workshop bookings happen on the main site. These are the rooms where it all gets planned, announced and argued about.</p>
+      </div>
+      <div id="audience-body"></div>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <p class="foot__line">The Weekend Film School, Hyderabad. Part of The Nobody Club.</p>
+    <nav class="foot__nav" id="foot-nav" aria-label="Elsewhere"></nav>
+  </footer>
+
+</div>
+
+<!-- ============================================================== THE CHIT -->
+<dialog class="chit" id="chit" aria-labelledby="chit-title">
+  <article class="chit__body">
+    <header class="chit__head">
+      <p class="chit__doc" id="chit-doc"></p>
+      <button class="chit__close" type="button" id="chit-close">Close</button>
+    </header>
+
+    <h2 class="chit__title" id="chit-title"></h2>
+    <p class="chit__group" id="chit-group"></p>
+    <p class="chit__about" id="chit-about"></p>
+    <p class="chit__reason" id="chit-reason"><span class="ast" aria-hidden="true">*</span><span id="chit-reason-text"></span></p>
+
+    <a class="go" id="chit-go" href="#" rel="noopener">Open WhatsApp</a>
+    <p class="chit__placeholder" id="chit-placeholder" hidden></p>
+    <p class="chit__state" id="chit-state" hidden></p>
+
+    <div class="qr" id="chit-qr" hidden>
+      <div class="qr__code" id="chit-qr-code"></div>
+      <p class="qr__cap">Scan this from another phone or a laptop</p>
+    </div>
+
+    <button class="chit__copy" id="chit-copy" type="button" hidden>Copy the link</button>
+  </article>
+</dialog>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/qr.js"></script>
+<script src="assets/js/gateway.js"></script>
+</body>
+</html>
