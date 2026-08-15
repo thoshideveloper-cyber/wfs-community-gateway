@@ -5,12 +5,17 @@
    Reads window.WFS_GATEWAY (config.js) and window.QR (qr.js). Nothing here
    needs editing to run the page: change config.js instead.
 
+   Three doors on the front sheet:
+     - The Weekend Film Crew    leads to a list of specialities.
+     - The Weekend Film School  opens its join chit straight away.
+     - The Nobody Club          opens its join chit straight away.
+
    Routes, so the phone back button and deep links both behave:
-     #/                      the front sheet
-     #/creators              the crew list
-     #/audience              the schedule
-     #/creators/actors       the crew list with the Actors chit open
-     #/audience/saturday     the schedule with the Saturday chit open
+     #/                         the front sheet
+     #/crew                     the crew list
+     #/crew/actors              the crew list with the Actors chit open
+     #/home/weekendFilmSchool   the front sheet with that chit open
+     #/home/nobodyClub          the front sheet with that chit open
    ========================================================================== */
 
 (function () {
@@ -21,18 +26,16 @@
 
   var $ = function (id) { return document.getElementById(id); };
 
-  var SIDES = { creators: 'creators', audience: 'audience' };
+  var SIDES = { crew: 'crew' };
 
   var views = {
     home: $('view-home'),
-    creators: $('view-creators'),
-    audience: $('view-audience')
+    crew: $('view-crew')
   };
 
   var headings = {
     home: $('front-h'),
-    creators: $('creators-h'),
-    audience: $('audience-h')
+    crew: $('crew-h')
   };
 
   var docLabel = $('doc-label');
@@ -87,23 +90,22 @@
       about: room.about,
       reason: room.reason,
       badge: room.badge,
-      when: room.when,
-      featured: !!room.featured,
+      doc: room.doc,
+      stock: room.stock,
       url: url,
       status: status
     };
     return rooms[room.link];
   }
 
-  var creators = cfg.creators || {};
-  var audience = cfg.audience || {};
+  var crewCfg = cfg.crew || {};
+  var homeCfg = cfg.home || {};
 
-  if (creators.featured) register(creators.featured, 'creators', 'creators');
-  (creators.departments || []).forEach(function (dept) {
-    (dept.rooms || []).forEach(function (r) { register(r, 'creators', 'creators'); });
+  (crewCfg.departments || []).forEach(function (dept) {
+    (dept.rooms || []).forEach(function (r) { register(r, 'crew', 'crew'); });
   });
-  (audience.scheduled || []).forEach(function (r) { register(r, 'audience', 'consumers'); });
-  (audience.alwaysOpen || []).forEach(function (r) { register(r, 'audience', 'consumers'); });
+  if (homeCfg.weekendFilmSchool) register(homeCfg.weekendFilmSchool, 'home', 'communities');
+  if (homeCfg.nobodyClub) register(homeCfg.nobodyClub, 'home', 'communities');
 
   /* --- Rendering --------------------------------------------------------- */
 
@@ -151,51 +153,6 @@
     return btn;
   }
 
-  function featuredSlip(room, docText) {
-    var btn = el('button', 'feature');
-    btn.type = 'button';
-    btn.dataset.key = room.key;
-    btn.setAttribute('aria-haspopup', 'dialog');
-
-    var main = el('span');
-    main.appendChild(el('span', 'feature__doc', docText));
-    var label = el('span', 'feature__label');
-    label.appendChild(document.createTextNode(room.label));
-    var tag = statusTag(room);
-    if (tag) label.appendChild(el('span', tag.cls, tag.text));
-    main.appendChild(label);
-    main.appendChild(el('span', 'feature__blurb', room.blurb));
-
-    var cue = el('span', 'feature__cue', '→');
-    cue.setAttribute('aria-hidden', 'true');
-
-    btn.appendChild(main);
-    btn.appendChild(cue);
-    return btn;
-  }
-
-  function scheduleSlot(room) {
-    var btn = el('button', 'slot' + (room.featured ? ' slot--wide' : ''));
-    btn.type = 'button';
-    btn.dataset.key = room.key;
-    btn.setAttribute('aria-haspopup', 'dialog');
-
-    if (room.when) btn.appendChild(el('span', 'slot__when', room.when));
-
-    var name = el('span', 'slot__name');
-    name.appendChild(document.createTextNode(room.label));
-    var tag = statusTag(room);
-    if (tag) name.appendChild(el('span', tag.cls, tag.text));
-    btn.appendChild(name);
-
-    btn.appendChild(el('span', 'slot__blurb', room.blurb));
-
-    var cue = el('span', 'slot__cue', '→');
-    cue.setAttribute('aria-hidden', 'true');
-    btn.appendChild(cue);
-    return btn;
-  }
-
   /* Stagger index, capped so the last block never feels like it is waiting. */
   var step = 2;
   function stagger(node) {
@@ -204,16 +161,12 @@
     return node;
   }
 
-  function renderCreators() {
-    var host = $('creators-body');
+  function renderCrew() {
+    var host = $('crew-body');
     if (!host) return;
     step = 2;
 
-    if (creators.featured && rooms[creators.featured.link]) {
-      host.appendChild(stagger(featuredSlip(rooms[creators.featured.link], 'The main room')));
-    }
-
-    (creators.departments || []).forEach(function (dept) {
+    (crewCfg.departments || []).forEach(function (dept) {
       var section = el('section', 'dept');
       section.appendChild(el('h2', 'dept__title', dept.title));
       var list = el('div', 'rooms');
@@ -225,27 +178,6 @@
     });
   }
 
-  function renderAudience() {
-    var host = $('audience-body');
-    if (!host) return;
-    step = 2;
-
-    var sched = el('div', 'sched');
-    (audience.scheduled || []).forEach(function (r) {
-      if (rooms[r.link]) sched.appendChild(scheduleSlot(rooms[r.link]));
-    });
-    host.appendChild(stagger(sched));
-
-    var always = el('section', 'always');
-    always.appendChild(el('h2', 'dept__title', 'Open all week'));
-    var list = el('div', 'rooms');
-    (audience.alwaysOpen || []).forEach(function (r) {
-      if (rooms[r.link]) list.appendChild(roomRow(rooms[r.link]));
-    });
-    always.appendChild(list);
-    host.appendChild(stagger(always));
-  }
-
   function renderFooter() {
     var nav = $('foot-nav');
     if (!nav) return;
@@ -253,7 +185,7 @@
     [
       ['site', 'Main site'],
       ['instagram', 'Instagram'],
-      ['nobodyClub', 'The Nobody Club']
+      ['nobodyClub', 'The Nobody Club, online']
     ].forEach(function (pair) {
       var href = links[pair[0]];
       if (!href) return;                       /* an empty link disappears */
@@ -289,10 +221,10 @@
     var meta = pathMeta[room.side] || {};
     var open = room.status === 'open' && !!room.url;
 
-    chit.dataset.stock = meta.stock || 'white';
-    els.doc.textContent = meta.docLabel || '';
+    chit.dataset.stock = room.stock || meta.stock || 'white';
+    els.doc.textContent = room.doc || meta.docLabel || '';
     els.title.textContent = room.label;
-    els.group.textContent = 'WhatsApp group · ' + room.name;
+    els.group.textContent = 'WhatsApp · ' + room.name;
     els.about.textContent = room.about;
     els.reasonText.textContent = room.reason || '';
     els.reason.hidden = !room.reason;
@@ -304,7 +236,7 @@
     if (open) {
       els.go.href = room.url;
       els.go.target = '_blank';
-      els.go.setAttribute('aria-label', 'Open the ' + room.name + ' group on WhatsApp');
+      els.go.setAttribute('aria-label', 'Open ' + room.name + ' on WhatsApp');
       els.state.hidden = true;
       els.placeholder.hidden = !isPlaceholder(room.url);
       els.placeholder.textContent = 'Placeholder link · replace it in config.js';
@@ -314,7 +246,7 @@
       els.placeholder.hidden = true;
       els.state.hidden = false;
       els.state.textContent = room.status === 'closed'
-        ? 'This room is closed for now. Join the main room and we will bring you back when it reopens.'
+        ? 'This room is closed for now. Join the main community and we will bring you back when it reopens.'
         : 'This room is not open yet.';
     }
 
@@ -340,14 +272,14 @@
      back tap lands on the room they just left. */
   function dismiss() {
     if (!chit.open) return;
-    var side = currentRoom ? currentRoom.side : 'creators';
+    var side = currentRoom ? currentRoom.side : 'home';
     currentRoom = null;
     chit.close();
     if (pushedChit) {
       pushedChit = false;
       history.back();
     } else {
-      location.replace('#/' + side);
+      location.replace(side === 'home' ? '#/' : '#/' + side);
     }
   }
 
@@ -389,7 +321,7 @@
     if (raw && raw.charAt(1) !== '/') return null;
     var parts = raw.replace(/^#\/?/, '').split('/').filter(Boolean);
     var side = SIDES[parts[0]] || 'home';
-    return { side: side, room: side === 'home' ? null : (parts[1] || null) };
+    return { side: side, room: parts[1] || null };
   }
 
   function showView(side) {
@@ -432,7 +364,7 @@
 
   document.addEventListener('click', function (e) {
     if (!e.target || !e.target.closest) return;
-    var btn = e.target.closest('.room, .feature, .slot');
+    var btn = e.target.closest('.room, .door');
     if (!btn || !btn.dataset.key) return;
     var room = rooms[btn.dataset.key];
     if (!room) return;
@@ -444,8 +376,7 @@
 
   /* --- Go ---------------------------------------------------------------- */
 
-  renderCreators();
-  renderAudience();
+  renderCrew();
   renderFooter();
   route();
 })();

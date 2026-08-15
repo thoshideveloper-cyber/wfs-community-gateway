@@ -271,9 +271,13 @@ main { display: block; }
   gap: var(--s3);
   align-content: stretch;
 }
-@media (min-width: 760px) { .doors { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 640px)  { .doors { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 980px)  { .doors { grid-template-columns: 1fr 1fr 1fr; } }
 
-/* A door is a slip of paper. Ink type on stock, in both colour schemes. */
+/* A door is a slip of paper. Ink type on stock, in both colour schemes.
+   Two of the three doors are <button>s (they open the chit directly rather
+   than navigating), so text-align and width are set explicitly rather than
+   relying on anchor defaults. */
 .door {
   --text: var(--wfs-ink);
   --text-dim: var(--wfs-ink-70);
@@ -284,14 +288,17 @@ main { display: block; }
   display: grid;
   grid-template-rows: auto auto 1fr;
   gap: var(--s3);
+  width: 100%;
   min-height: clamp(176px, 27vh, 290px);
   padding: clamp(16px, 3.4vw, 28px);
   border: var(--rule-hair) solid var(--wfs-ink);
   color: var(--wfs-ink);
+  text-align: left;
   transition: transform var(--dur-tap) var(--ease-cut);
 }
 .door--green { background: var(--wfs-stock-green); }
 .door--blue  { background: var(--wfs-stock-blue); }
+.door--gold  { background: var(--wfs-stock-goldenrod); }
 
 .door__doc {
   font-family: var(--font-mono);
@@ -490,177 +497,7 @@ main { display: block; }
 }
 .tag--closed { background: var(--wfs-stock-cherry); }
 
-/* --- 10. The featured slip ---------------------------------------------- */
-.feature {
-  --text: var(--wfs-ink);
-  --text-dim: var(--wfs-ink-70);
-  --accent: var(--wfs-green);
-
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: var(--s3) var(--s4);
-  width: 100%;
-  padding: clamp(16px, 3.4vw, 26px);
-  border: var(--rule-hair) solid var(--wfs-ink);
-  background: var(--wfs-stock-green);
-  color: var(--wfs-ink);
-  text-align: left;
-  transition: transform var(--dur-tap) var(--ease-cut);
-}
-
-.feature__doc {
-  font-family: var(--font-mono);
-  font-weight: 500;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.13em;
-  color: var(--wfs-ink-70);
-}
-
-.feature__label {
-  margin-top: 10px;
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-variation-settings: 'wdth' 112, 'wght' 900;
-  letter-spacing: -0.035em;
-  line-height: 0.9;
-  font-size: clamp(26px, 6.4vw, 40px);
-}
-
-.feature__blurb {
-  margin-top: 10px;
-  max-width: 40ch;
-  color: var(--wfs-ink-70);
-  font-size: 14.5px;
-  line-height: 1.35;
-}
-
-.feature__cue { font-size: 26px; line-height: 1; transition: transform var(--dur-ui) var(--ease-cut); }
-
-.feature::after {
-  content: "";
-  position: absolute;
-  left: -2px; right: -2px; bottom: -2px;
-  height: var(--rule-heavy);
-  background: var(--wfs-green);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform var(--dur-ui) var(--ease-cut);
-}
-@media (hover: hover) and (pointer: fine) {
-  .feature:hover::after { transform: scaleX(1); }
-  .feature:hover .feature__cue { transform: translateX(8px); }
-}
-.feature:focus-visible::after { transform: scaleX(1); }
-.feature:active { transform: translateY(1px); }
-
-/* --- 11. The schedule --------------------------------------------------- */
-.sched {
-  display: grid;
-  gap: var(--s3);
-}
-@media (min-width: 760px) {
-  .sched { grid-template-columns: 1fr 1fr; }
-  .slot--wide { grid-column: 1 / -1; }
-}
-
-.slot {
-  --text: var(--wfs-ink);
-  --text-dim: var(--wfs-ink-70);
-  --accent: var(--wfs-green);
-
-  position: relative;
-  display: grid;
-  grid-template-rows: auto auto 1fr;
-  gap: var(--s3);
-  width: 100%;
-  min-height: 150px;
-  padding: clamp(16px, 3.4vw, 26px);
-  border: var(--rule-hair) solid var(--wfs-ink);
-  background: var(--wfs-stock-blue);
-  color: var(--wfs-ink);
-  text-align: left;
-  transition: transform var(--dur-tap) var(--ease-cut);
-}
-
-/* Weekend Nights is issued on ink, because ink is the screening stock. It is
-   the one thing on this side that happens in a dark room. */
-.slot--wide {
-  --text: var(--wfs-stock-white);
-  --text-dim: var(--wfs-ink-40);
-  --accent: var(--wfs-green-hi);
-
-  min-height: clamp(190px, 26vh, 260px);
-  border-color: var(--line);
-  background: var(--wfs-ink);
-  color: var(--wfs-stock-white);
-}
-
-.slot__when {
-  font-family: var(--font-mono);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.13em;
-  font-size: 12px;
-  color: var(--text-dim);
-  padding-bottom: var(--s2);
-  border-bottom: var(--rule-mid) solid currentColor;
-  justify-self: start;
-}
-.slot--wide .slot__when { font-size: clamp(14px, 3vw, 19px); color: var(--wfs-stock-white); }
-
-.slot__name {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-variation-settings: 'wdth' 112, 'wght' 900;
-  letter-spacing: -0.035em;
-  line-height: 0.9;
-  font-size: clamp(25px, 5.8vw, 34px);
-}
-.slot--wide .slot__name { font-size: clamp(34px, 8vw, 62px); }
-
-.slot__blurb {
-  align-self: end;
-  max-width: 40ch;
-  padding-right: 40px;
-  color: var(--text-dim);
-  font-size: 14.5px;
-  line-height: 1.35;
-}
-.slot--wide .slot__blurb { color: var(--wfs-stock-white); opacity: 0.82; }
-
-.slot__cue {
-  position: absolute;
-  right: clamp(16px, 3.4vw, 26px);
-  bottom: clamp(14px, 3vw, 22px);
-  font-size: 24px;
-  line-height: 1;
-  transition: transform var(--dur-ui) var(--ease-cut);
-}
-
-.slot::after {
-  content: "";
-  position: absolute;
-  left: -2px; right: -2px; bottom: -2px;
-  height: var(--rule-heavy);
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform var(--dur-ui) var(--ease-cut);
-}
-@media (hover: hover) and (pointer: fine) {
-  .slot:hover::after { transform: scaleX(1); }
-  .slot:hover .slot__cue { transform: translateX(8px); }
-}
-.slot:focus-visible::after { transform: scaleX(1); }
-.slot:focus-visible .slot__cue { transform: translateX(8px); }
-.slot:active { transform: translateY(1px); }
-
-.always { margin-top: clamp(26px, 5vh, 46px); }
-
-/* --- 12. The chit ------------------------------------------------------- */
+/* --- 10. The chit ------------------------------------------------------- */
 .chit {
   --text: var(--wfs-ink);
   --text-dim: var(--wfs-ink-70);
@@ -689,8 +526,9 @@ main { display: block; }
     overlay var(--dur-exit) allow-discrete,
     display var(--dur-exit) allow-discrete;
 }
-.chit[data-stock="green"] { background: var(--wfs-stock-green); }
-.chit[data-stock="blue"]  { background: var(--wfs-stock-blue); }
+.chit[data-stock="green"]     { background: var(--wfs-stock-green); }
+.chit[data-stock="blue"]      { background: var(--wfs-stock-blue); }
+.chit[data-stock="goldenrod"] { background: var(--wfs-stock-goldenrod); }
 
 .chit[open] {
   opacity: 1;
@@ -864,7 +702,7 @@ body:has(.chit[open]) { overflow: hidden; }
   .chit__copy:hover { color: var(--wfs-ink); border-color: var(--wfs-ink); }
 }
 
-/* --- 13. QR ------------------------------------------------------------- */
+/* --- 11. QR ------------------------------------------------------------- */
 .qr {
   display: grid;
   justify-items: center;
@@ -900,7 +738,7 @@ body:has(.chit[open]) { overflow: hidden; }
   text-align: center;
 }
 
-/* --- 14. Footer --------------------------------------------------------- */
+/* --- 12. Footer --------------------------------------------------------- */
 .foot {
   display: flex;
   flex-wrap: wrap;
@@ -933,10 +771,10 @@ body:has(.chit[open]) { overflow: hidden; }
   .foot__nav a:hover { color: var(--text); border-bottom-color: var(--accent); }
 }
 
-/* --- 15. Short screens -------------------------------------------------- */
+/* --- 13. Short screens -------------------------------------------------- */
 /* Most people arrive here from a QR code on a phone, and the whole point is
-   that both ways in are on screen at once. On a short handset the sheet
-   tightens rather than pushing the second door under the fold. */
+   that all the doors are on screen at once. On a short handset the sheet
+   tightens rather than pushing the last door under the fold. */
 @media (max-height: 720px) {
   .mast { padding-bottom: var(--s3); }
   .view { padding: 26px 0 20px; gap: 26px; }
@@ -948,19 +786,17 @@ body:has(.chit[open]) { overflow: hidden; }
   .door__cue { right: 15px; bottom: 13px; font-size: 22px; }
 }
 
-/* --- 16. Reduced motion ------------------------------------------------- */
+/* --- 14. Reduced motion ------------------------------------------------- */
 /* Fewer and gentler, not none. Opacity stays, movement goes. */
 @media (prefers-reduced-motion: reduce) {
   .stagger { animation: none; }
-  .door::after, .feature::after, .slot::after, .room::before { transition: none; transform: scaleX(1); opacity: 0; }
+  .door::after, .room::before { transition: none; transform: scaleX(1); opacity: 0; }
   .door:hover::after, .door:focus-visible::after,
-  .feature:hover::after, .feature:focus-visible::after,
-  .slot:hover::after, .slot:focus-visible::after,
   .room:hover::before, .room:focus-visible::before { opacity: 1; }
-  .door__cue, .feature__cue, .slot__cue, .room__cue, .room__main { transition: none !important; transform: none !important; }
+  .door__cue, .room__cue, .room__main { transition: none !important; transform: none !important; }
   .chit, .chit::backdrop { transition-duration: 1ms; }
   .chit { transform: none; }
   .chit[open] { transform: none; }
   .qr__code svg { transition: none; clip-path: none; }
-  .go:active, .door:active, .slot:active, .feature:active { transform: none; }
+  .go:active, .door:active { transform: none; }
 }
